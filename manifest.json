@@ -1,28 +1,32 @@
-[browser]
-gatherUsageStats = false
+{
+  "name": "SmartDash",
+  "short_name": "SmartDash",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#2E86C1",
+  "icons": [
+    {
+      "src": "icon_192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_256.png",
+      "sizes": "256x256",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_384.png",
+      "sizes": "384x384",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
 
-[server]
-enableWebsocketCompression = false
-
-[theme]
-primaryColor = "#2E86C1"
-backgroundColor = "#ffffff"
-secondaryBackgroundColor = "#f0f2f6"
-textColor = "#000000"
-
-[ui]
-# Inject manifest and service worker into Streamlit
-customPage = """
-<script>
-  // Add manifest to the document
-  const link = document.createElement('link');
-  link.rel = 'manifest';
-  link.href = '/manifest.json';
-  document.head.appendChild(link);
-
-  // Register service worker
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/service-worker.js');
-  }
-</script>
-"""
