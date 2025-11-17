@@ -1,0 +1,35 @@
+[server]
+enableCORS = false
+enableXsrfProtection = false
+baseUrlPath = "/"
+port = 8501
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+primaryColor = "#2E86C1"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F2F3F4"
+textColor = "#000000"
+font = "sans serif"
+
+[ui]
+hideTopBar = false
+
+[pwa]
+manifest = "manifest.json"
+service_worker = "service-worker.js"
+self.addEventListener('install', (event) => {
+  console.log('SmartDash Service Worker Installed');
+  event.waitUntil(self.skipWaiting());
+});
+
+self.addEventListener('activate', (event) => {
+  console.log('SmartDash Service Worker Activated');
+  event.waitUntil(self.clients.claim());
+});
+
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request));
+});
