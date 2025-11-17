@@ -1,0 +1,28 @@
+[browser]
+gatherUsageStats = false
+
+[server]
+enableWebsocketCompression = false
+
+[theme]
+primaryColor = "#2E86C1"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0f2f6"
+textColor = "#000000"
+
+[ui]
+# Inject manifest and service worker into Streamlit
+customPage = """
+<script>
+  // Add manifest to the document
+  const link = document.createElement('link');
+  link.rel = 'manifest';
+  link.href = '/manifest.json';
+  document.head.appendChild(link);
+
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/service-worker.js');
+  }
+</script>
+"""
