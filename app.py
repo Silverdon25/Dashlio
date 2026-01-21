@@ -81,7 +81,7 @@ st.markdown(
 col1, col2 = st.columns([1, 3], vertical_alignment="center")
 with col1:
     if os.path.exists(LOGO_FILE):
-        st.image(LOGO_FILE, width=90)
+        st.image(LOGO_FILE, width=130)
 with col2:
     st.title(APP_NAME)
     st.caption("Upload a dataset, preview it, and generate charts instantly.")
