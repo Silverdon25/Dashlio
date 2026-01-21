@@ -6,73 +6,74 @@
 # ------------------------------------------------------------
 
 import streamlit as st
-from PIL import Image
 import pandas as pd
 import plotly.express as px
 
 # ------------------------------------------------------------
 # PAGE CONFIG (MUST COME BEFORE ANY STREAMLIT OUTPUT)
 # ------------------------------------------------------------
-st.set_page_config(page_title="Dashlio - Data Dashboard", page_icon="📊"
-
+st.set_page_config(
+    page_title="Dashlio - Data Dashboard",
+    page_icon="📊",
+    layout="centered"
 )
 
 # ------------------------------------------------------------
 # MOBILE VIEW FIXES + DARK MODE + CLEAN UI
 # ------------------------------------------------------------
-st.markdown("""
-<style>
-
-/* Make layout fit properly on mobile */
-.main .block-container {
-    padding-top: 1rem !important;
-    padding-left: 0.7rem !important;
-    padding-right: 0.7rem !important;
-}
-
-/* Responsive charts */
-.css-1kyxreq {
-    width: 100% !important;
-}
-
-/* Clean UI spacing */
-h1, h2, h3, h4 {
-    margin-top: 0.2rem;
-    margin-bottom: 0.5rem;
-}
-
-/* DARK MODE (auto based on device settings) */
-@media (prefers-color-scheme: dark) {
-    body, .main {
-        background-color: #0e1117 !important;
-        color: #e6e6e6 !important;
+st.markdown(
+    """
+    <style>
+    /* Make layout fit properly on mobile */
+    .main .block-container {
+        padding-top: 1rem !important;
+        padding-left: 0.7rem !important;
+        padding-right: 0.7rem !important;
     }
-    .sidebar .sidebar-content {
-        background-color: #11141c !important;
-    }
-    .stButton>button {
-        background-color: #1f2937 !important;
-        color: white !important;
-        border: 1px solid #3b4252 !important;
-    }
-    .stDownloadButton>button {
-        background-color: #1f2937 !important;
-        color: white !important;
-        border: 1px solid #3b4252 !important;
-    }
-}
-</style>
-""", unsafe_allow_html=True)
 
-# Ensure proper mobile viewport scaling:
-st.markdown("""
-<script>
-var meta = document.createElement('meta');
-meta.name = "viewport";
-meta.content = "width=device-width, initial-scale=1, user-scalable=no";
-document.getElementsByTagName('head')[0].appendChild(meta);
-</script>
-""", unsafe_allow_html=True)
+    /* Responsive charts */
+    .css-1kyxreq {
+        width: 100% !important;
+    }
+
+    /* Clean UI spacing */
+    h1, h2, h3, h4 {
+        margin-top: 0.2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    /* DARK MODE (auto based on device settings) */
+    @media (prefers-color-scheme: dark) {
+        body, .main {
+            background-color: #0e1117 !important;
+            color: #e6e6e6 !important;
+        }
+        .sidebar .sidebar-content {
+            background-color: #11141c !important;
+        }
+        .stButton>button, .stDownloadButton>button {
+            background-color: #1f2937 !important;
+            color: white !important;
+            border: 1px solid #3b4252 !important;
+        }
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
+# (Optional) viewport script – safe to keep
+st.markdown(
+    """
+    <script>
+    var meta = document.createElement('meta');
+    meta.name = "viewport";
+    meta.content = "width=device-width, initial-scale=1, user-scalable=no";
+    document.getElementsByTagName('head')[0].appendChild(meta);
+    </script>
+    """,
+    unsafe_allow_html=True
+)
 
 # ------------------------------------------------------------
 # APPLY DARK MODE TO PLOTLY CHARTS
@@ -91,10 +92,14 @@ def apply_dark_mode(fig):
 logo = "logo.png"
 st.image(logo, width=360)
 
-st.markdown(Dashlio
-"<h1 style='color:#2E86C1; text-align:center;'>📊 Dashlio</h1>"<p style='color:gray; text-align:center;'>Designed and Developed by Mr. Devon Wildman</p>
-<hr>
-""", unsafe_allow_html=True)
+st.markdown(
+    """
+    <h1 style='color:#2E86C1; text-align:center;'>Dashlio</h1>
+    <p style='color:gray; text-align:center;'>Designed and Developed by Mr. Devon Wildman</p>
+    <hr>
+    """,
+    unsafe_allow_html=True
+)
 
 # ------------------------------------------------------------
 # SIDEBAR
@@ -125,7 +130,7 @@ if uploaded_file:
 
         # --- VISUALISATION ---
         st.subheader("📊 Data Visualisation")
-        numeric_cols = df.select_dtypes(include=['float', 'int']).columns.tolist()
+        numeric_cols = df.select_dtypes(include=["float", "int"]).columns.tolist()
         all_cols = df.columns.tolist()
 
         if numeric_cols:
@@ -133,7 +138,6 @@ if uploaded_file:
             y_axis = st.sidebar.selectbox("Select Y-axis", numeric_cols)
             chart_type = st.sidebar.selectbox("Select Chart Type", ["Bar", "Line", "Scatter", "Pie"])
 
-            # Generate chart
             if chart_type == "Bar":
                 fig = px.bar(df, x=x_axis, y=y_axis)
             elif chart_type == "Line":
@@ -143,30 +147,25 @@ if uploaded_file:
             else:
                 fig = px.pie(df, names=x_axis, values=y_axis)
 
-            # Apply Dark Mode to chart
             fig = apply_dark_mode(fig)
-
             st.plotly_chart(fig, use_container_width=True)
-
         else:
             st.warning("⚠️ No numerical columns found. Please upload a dataset with numbers.")
 
         # --- DOWNLOAD CLEANED FILE ---
         st.subheader("📥 Export Options")
-        csv = df.to_csv(index=False).encode('utf-8')
+        csv = df.to_csv(index=False).encode("utf-8")
         st.download_button("Download Cleaned Data (CSV)", csv, "cleaned_data.csv", "text/csv")
 
     except Exception as e:
         st.error(f"⚠️ Error reading file: {e}")
-
 else:
     st.info("👆 Please upload a file to begin.")
 
 # ------------------------------------------------------------
 # FOOTER
 # ------------------------------------------------------------
-st.markdown("""
-<hr>
+st.markdown("<hr>", unsafe_allow_html=True)
 st.markdown(
     "<p style='text-align:center; color:gray;'>© 2025 Dashlio | Designed by Mr. Devon Wildman</p>",
     unsafe_allow_html=True
