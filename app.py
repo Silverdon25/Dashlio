@@ -91,7 +91,7 @@ def apply_dark_mode(fig):
 logo = "logo.png"
 st.image(logo, width=360)
 
-st.markdown("""
+st.markdown(Dashlio
 <h1 style='color:#2E86C1; text-align:center;'>📊 Dashlio</h1>
 <p style='color:gray; text-align:center;'>Designed and Developed by Mr. Devon Wildman</p>
 <hr>
