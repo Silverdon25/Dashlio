@@ -13,7 +13,7 @@ import plotly.express as px
 # ------------------------------------------------------------
 # PAGE CONFIG (MUST COME BEFORE ANY STREAMLIT OUTPUT)
 # ------------------------------------------------------------
-st.set_page_config(page_title="Dashlio - Data Dashboard", page_icon="📊")
+st.set_page_config(page_title="Dashlio - Data Dashboard", page_icon="📊"
 
 )
 
