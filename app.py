@@ -1,5 +1,5 @@
 # ------------------------------------------------------------
-# SmartDash – Data Dashboard Builder
+# Dashlio – Data Dashboard Builder
 # Copyright (c) 2025
 # Designed and Developed by Mr. Devon Wildman
 # All rights reserved.
@@ -14,7 +14,7 @@ import plotly.express as px
 # PAGE CONFIG (MUST COME BEFORE ANY STREAMLIT OUTPUT)
 # ------------------------------------------------------------
 st.set_page_config(
-    page_title="SmartDash - Data Dashboard Builder",
+    page_title="dashlio - Data Dashboard Builder",
     page_icon="📊",
     layout="wide"
 )
@@ -94,7 +94,7 @@ logo = "logo.png"
 st.image(logo, width=120)
 
 st.markdown("""
-<h1 style='color:#2E86C1; text-align:center;'>📊 SmartDash</h1>
+<h1 style='color:#2E86C1; text-align:center;'>📊 Dashlio</h1>
 <p style='color:gray; text-align:center;'>Designed and Developed by Mr. Devon Wildman</p>
 <hr>
 """, unsafe_allow_html=True)
@@ -170,6 +170,6 @@ else:
 # ------------------------------------------------------------
 st.markdown("""
 <hr>
-<p style='text-align: center; color: gray;'>© 2025 SmartDash | Designed by Mr. Wildman</p>
+<p style='text-align: center; color: gray;'>© 2025 Dashlio | Designed by Mr. Wildman</p>
 """, unsafe_allow_html=True)
 
