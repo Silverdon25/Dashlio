@@ -1,8 +1,8 @@
-# 📊 SmartDash – Data Dashboard Builder
+# 📊 Dashlio – Data Dashboard Builder
 
 **Developed and Designed by Mr. Devon Wildman**
 
-SmartDash is a web-based data dashboard application that allows users to upload CSV or Excel files, automatically generate interactive charts, and download cleaned data. It helps small business owners, students, and freelancers quickly turn data into insights — no coding required.
+Dashlio is a web-based data dashboard application that allows users to upload CSV or Excel files, automatically generate interactive charts, and download cleaned data. It helps small business owners, students, and freelancers quickly turn data into insights — no coding required.
 
 ---
 
@@ -26,5 +26,5 @@ SmartDash is a web-based data dashboard application that allows users to upload 
 ## ⚙️ How to Run Locally
 1. Clone this repository:
    ```bash
-   git clone https://github.com/YOURUSERNAME/SmartDash.git
-   cd SmartDash
+   git clone https://github.com/YOURUSERNAME/Dashlio.git
+   cd Dashlio
