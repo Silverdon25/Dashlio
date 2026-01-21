@@ -39,7 +39,7 @@ PLAN = PLANS.get(TIER, PLANS["free"])
 APP_NAME = "Dashlio"
 
 # If you upload a logo file to the repo, set the filename here
-LOGO_FILE = "dashlio_logo.png"  # put your new Dashlio logo in the repo with this exact name
+LOGO_FILE = "logo.png"  # put your new Dashlio logo in the repo with this exact name
 
 
 # -----------------------------
