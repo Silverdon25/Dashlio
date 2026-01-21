@@ -89,28 +89,36 @@ def apply_dark_mode(fig):
 # ------------------------------------------------------------
 # HEADER + LOGO
 # ------------------------------------------------------------
-logo = "logo.png"
-st.image(logo, width=360)
+# ------------------------------------------------------------
+# HEADER
+# ------------------------------------------------------------
+st.image("logo.png", width=220)
 
 st.markdown(
     """
-    <h1 style='color:#2E86C1; text-align:center;'>Dashlio</h1>
-    <p style='color:gray; text-align:center;'>Designed and Developed by Mr. Devon Wildman</p>
+    <h1 style="text-align:center; color:#2E86C1;">Dashlio</h1>
+    <p style="text-align:center; color:gray;">
+        Turn data into clear dashboards — instantly
+    </p>
     <hr>
     """,
     unsafe_allow_html=True
 )
 
+)
+
 # ------------------------------------------------------------
 # SIDEBAR
 # ------------------------------------------------------------
-st.sidebar.header("⚙️ Controls")
+st.sidebar.header("Controls")
+
 st.sidebar.info("Upload your dataset to enable chart options.")
 
 # ------------------------------------------------------------
 # FILE UPLOAD SECTION
 # ------------------------------------------------------------
-uploaded_file = st.file_uploader("📂 Upload a CSV or Excel file", type=["csv", "xlsx"])
+uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx"])
+
 
 if uploaded_file:
     try:
@@ -129,7 +137,8 @@ if uploaded_file:
             st.write(df.describe())
 
         # --- VISUALISATION ---
-        st.subheader("📊 Data Visualisation")
+        st.subheader("Data Visualisation")
+
         numeric_cols = df.select_dtypes(include=["float", "int"]).columns.tolist()
         all_cols = df.columns.tolist()
 
@@ -165,9 +174,20 @@ else:
 # ------------------------------------------------------------
 # FOOTER
 # ------------------------------------------------------------
-st.markdown("<hr>", unsafe_allow_html=True)
+# ------------------------------------------------------------
+# FOOTER
+# ------------------------------------------------------------
 st.markdown(
-    "<p style='text-align:center; color:gray;'>© 2025 Dashlio | Designed by Mr. Devon Wildman</p>",
+    """
+    <hr>
+    <p style="text-align:center; color:gray;">
+        © 2025 Dashlio. All rights reserved.
+    </p>
+    """,
     unsafe_allow_html=True
+)
+
+)
+
 )
 
