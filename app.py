@@ -89,7 +89,7 @@ def apply_dark_mode(fig):
 # HEADER + LOGO
 # ------------------------------------------------------------
 logo = "logo.png"
-st.image(logo, width=120)
+st.image(logo, width=360)
 
 st.markdown("""
 <h1 style='color:#2E86C1; text-align:center;'>📊 Dashlio</h1>
