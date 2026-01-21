@@ -167,6 +167,8 @@ else:
 # ------------------------------------------------------------
 st.markdown("""
 <hr>
-st.caption("© 2025 Dashlio | Designed by Mr. Devon Wildman")
-""", unsafe_allow_html=True)
+st.markdown(
+    "<p style='text-align:center; color:gray;'>© 2025 Dashlio | Designed by Mr. Devon Wildman</p>",
+    unsafe_allow_html=True
+)
 
