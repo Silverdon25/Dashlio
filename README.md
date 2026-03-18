@@ -25,7 +25,9 @@ https://dashlio.streamlit.app
 
 ## Dashboard Preview
 
-![Dashlio Screenshot](Screenshot 2026-03-18 at 19.5...)
+## Dashboard Preview
+
+![Dashlio Screenshot](dashlio-screenshot.png)
 
 ## Author
 
