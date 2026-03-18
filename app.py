@@ -55,7 +55,7 @@ st.set_page_config(
     layout="centered",
     initial_sidebar_state="expanded",
 )
-# st.markdown(
+st.markdown(
     """
     <style>
     #MainMenu {visibility: hidden;}
