@@ -1,30 +1,33 @@
-# 📊 Dashlio – Data Dashboard Builder
+# Dashlio
 
-**Developed and Designed by Mr. Devon Wildman**
+Dashlio is a lightweight cloud data dashboard builder.
 
-Dashlio is a web-based data dashboard application that allows users to upload CSV or Excel files, automatically generate interactive charts, and download cleaned data. It helps small business owners, students, and freelancers quickly turn data into insights — no coding required.
+Users can upload datasets and instantly generate charts and visual insights.
 
----
+## Live Demo
 
-## 🚀 Features
-- 📂 Upload CSV or Excel datasets
-- 👀 Preview and summarize data instantly
-- 📊 Auto-generate charts (bar, line, scatter, pie)
-- 📈 View summary statistics
-- 📥 Download cleaned data
-- 💼 Designed with a professional, modern layout
+https://dashlio.streamlit.app
 
----
+## Features
 
-## 🛠️ Tech Stack
-- **Frontend / App Framework:** Streamlit  
-- **Programming Language:** Python  
-- **Libraries:** pandas, plotly  
+- Upload CSV or Excel files
+- Preview and explore your data
+- Generate charts automatically
+- Simple and clean interface
 
----
+## Tech Stack
 
-## ⚙️ How to Run Locally
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/YOURUSERNAME/Dashlio.git
-   cd Dashlio
+- Python
+- Streamlit
+- Pandas
+- Plotly
+- GitHub
+
+## Dashboard Preview
+
+![Dashlio Screenshot](Screenshot 2026-03-18 at 19.5...)
+
+## Author
+
+Devon Wildman  
+Founder – SmartDash Analytics Ltd
