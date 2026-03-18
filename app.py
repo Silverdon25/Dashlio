@@ -84,7 +84,15 @@ with col1:
         st.image(LOGO_FILE, width=160)
 with col2:
     st.title(APP_NAME)
-    st.caption("Upload a dataset, preview it, and generate charts instantly.")
+st.markdown(
+    """
+Upload your dataset and instantly generate charts and visual insights.
+
+• Upload CSV or Excel files  
+• Preview and explore your data  
+• Generate charts automatically  
+"""
+)   
 
 st.markdown(f"<span class='dashlio-pill'>Plan: {PLAN.name}</span>", unsafe_allow_html=True)
 st.divider()
