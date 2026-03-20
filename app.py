@@ -52,7 +52,7 @@ if os.path.exists(LOGO_FILE):
 st.set_page_config(
     page_title=f"{APP_NAME} — Data Dashboard",
     page_icon=page_icon,
-    layout="centered",
+    layout="wide",
     initial_sidebar_state="expanded",
 )
 st.markdown(
