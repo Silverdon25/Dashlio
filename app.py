@@ -196,6 +196,26 @@ if len(numeric_cols) > 0:
         if df.shape[1] > PLAN.max_cols:
             st.error(f"Your dataset has {df.shape[1]:,} columns. Your plan allows up to {PLAN.max_cols:,}.")
             st.stop()
+        # Data Cleaning
+st.subheader("🧹 Data Cleaning")
+
+missing_total = int(df.isna().sum().sum())
+st.write(f"Missing values in dataset: {missing_total}")
+
+if missing_total > 0:
+    cleaning_option = st.selectbox(
+        "Choose how to handle missing values",
+        ["Do nothing", "Drop rows with missing values", "Fill numeric missing values with column mean"]
+    )
+
+    if cleaning_option == "Drop rows with missing values":
+        df = df.dropna()
+        st.success("Rows with missing values removed.")
+
+    elif cleaning_option == "Fill numeric missing values with column mean":
+        numeric_cols = df.select_dtypes(include="number").columns
+        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
+        st.success("Numeric missing values filled with column mean.")
 
         st.subheader("Preview")
         st.dataframe(df.head(50), use_container_width=True)
