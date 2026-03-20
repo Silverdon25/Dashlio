@@ -170,6 +170,24 @@ else:
 
     try:
         df = read_uploaded_file(uploaded_file)
+        # # KPI Section
+st.subheader("📊 Key Metrics")
+
+numeric_cols = df.select_dtypes(include='number').columns
+
+if len(numeric_cols) > 0:
+    selected_column = st.selectbox("Select column for analysis", numeric_cols)
+
+    col1, col2, col3 = st.columns(3)
+
+    col1.metric("Total Rows", df.shape[0])
+    col2.metric("Columns", df.shape[1])
+    col3.metric("Average", round(df[selected_column].mean(), 2))
+
+    col4, col5 = st.columns(2)
+
+    col4.metric("Max", df[selected_column].max())
+    col5.metric("Min", df[selected_column].min())
 
         # Enforce plan limits
         if df.shape[0] > PLAN.max_rows:
