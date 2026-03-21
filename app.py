@@ -1,4 +1,4 @@
-#------------------------------------------------------------
+# ------------------------------------------------------------
 # Dashlio — Data Dashboard Builder
 # Production build (no legacy SmartDash references)
 # ------------------------------------------------------------
@@ -23,27 +23,45 @@ class Plan:
     max_cols: int
     max_upload_mb: int
     export_enabled: bool
-    branding_locked: bool  # if True, show "Powered by Dashlio" and prevent hiding branding
+    branding_locked: bool
 
 
 PLANS = {
-    "free": Plan(name="Free", max_rows=25_000, max_cols=50, max_upload_mb=10, export_enabled=False, branding_locked=True),
-    "pro": Plan(name="Pro", max_rows=250_000, max_cols=200, max_upload_mb=50, export_enabled=True, branding_locked=False),
-    "business": Plan(name="Business", max_rows=2_000_000, max_cols=500, max_upload_mb=200, export_enabled=True, branding_locked=False),
+    "free": Plan(
+        name="Free",
+        max_rows=25_000,
+        max_cols=50,
+        max_upload_mb=10,
+        export_enabled=False,
+        branding_locked=True,
+    ),
+    "pro": Plan(
+        name="Pro",
+        max_rows=250_000,
+        max_cols=200,
+        max_upload_mb=50,
+        export_enabled=True,
+        branding_locked=False,
+    ),
+    "business": Plan(
+        name="Business",
+        max_rows=2_000_000,
+        max_cols=500,
+        max_upload_mb=200,
+        export_enabled=True,
+        branding_locked=False,
+    ),
 }
 
-# Set your tier in Streamlit Secrets as TIER=free/pro/business
 TIER = (st.secrets.get("TIER", "free") if hasattr(st, "secrets") else "free").lower().strip()
 PLAN = PLANS.get(TIER, PLANS["free"])
 
 APP_NAME = "Dashlio"
-
-# If you upload a logo file to the repo, set the filename here
-LOGO_FILE = "logo.png"  # put your new Dashlio logo in the repo with this exact name
+LOGO_FILE = "logo.png"
 
 
 # -----------------------------
-# Page config (must be first Streamlit call)
+# Page config
 # -----------------------------
 page_icon = "📊"
 if os.path.exists(LOGO_FILE):
@@ -55,6 +73,7 @@ st.set_page_config(
     layout="wide",
     initial_sidebar_state="expanded",
 )
+
 st.markdown(
     """
     <style>
@@ -63,7 +82,7 @@ st.markdown(
     header {visibility: hidden;}
     </style>
     """,
-    unsafe_allow_html=True
+    unsafe_allow_html=True,
 )
 
 # -----------------------------
@@ -72,10 +91,20 @@ st.markdown(
 st.markdown(
     """
     <style>
-      .main .block-container { padding-top: 1.25rem; padding-left: 1rem; padding-right: 1rem; max-width: 980px; }
+      .main .block-container {
+          padding-top: 1.25rem;
+          padding-left: 1rem;
+          padding-right: 1rem;
+          max-width: 1100px;
+      }
       h1,h2,h3 { margin: 0.25rem 0 0.5rem 0; }
-      .dashlio-muted { color: #6b7280; font-size: 0.95rem; }
-      .dashlio-pill { display:inline-block; padding:0.2rem 0.55rem; border:1px solid #e5e7eb; border-radius:999px; font-size:0.85rem; }
+      .dashlio-pill {
+          display:inline-block;
+          padding:0.2rem 0.55rem;
+          border:1px solid #e5e7eb;
+          border-radius:999px;
+          font-size:0.85rem;
+      }
       @media (prefers-color-scheme: dark) {
         body, .main { background: #0e1117 !important; color: #e6e6e6 !important; }
         .dashlio-pill { border-color:#334155; }
@@ -86,14 +115,17 @@ st.markdown(
 )
 
 # -----------------------------
-# Header (no fragile HTML mixing)
+# Header
 # -----------------------------
 col1, col2 = st.columns([1, 3], vertical_alignment="center")
+
 with col1:
     if os.path.exists(LOGO_FILE):
         st.image(LOGO_FILE, width=160)
+
 with col2:
     st.title(APP_NAME)
+
 st.markdown(
     """
 Upload your dataset and instantly generate charts and visual insights.
@@ -102,13 +134,13 @@ Upload your dataset and instantly generate charts and visual insights.
 • Preview and explore your data  
 • Generate charts automatically  
 """
-)   
+)
 
 st.markdown(f"<span class='dashlio-pill'>Plan: {PLAN.name}</span>", unsafe_allow_html=True)
 st.divider()
 
 # -----------------------------
-# Sidebar (pricing + limits + upgrade)
+# Sidebar
 # -----------------------------
 with st.sidebar:
     st.header("Account")
@@ -128,6 +160,7 @@ with st.sidebar:
     st.divider()
     st.subheader("Chart Settings")
     chart_type = st.selectbox("Chart type", ["Bar", "Line", "Scatter", "Pie"], index=0)
+
 
 # -----------------------------
 # Helpers
@@ -158,73 +191,83 @@ uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xls
 if not uploaded_file:
     st.info("Upload a file to begin.")
 else:
-    # Basic upload size check (Streamlit also enforces server limits)
-    # This is a soft guard for customer messaging.
     try:
         file_size_mb = (uploaded_file.size or 0) / (1024 * 1024)
         if file_size_mb > PLAN.max_upload_mb:
-            st.error(f"This file is {file_size_mb:.1f} MB. Your plan allows up to {PLAN.max_upload_mb} MB.")
+            st.error(
+                f"This file is {file_size_mb:.1f} MB. Your plan allows up to {PLAN.max_upload_mb} MB."
+            )
             st.stop()
     except Exception:
         pass
 
     try:
         df = read_uploaded_file(uploaded_file)
-        # # KPI Section
-st.subheader("📊 Key Metrics")
-
-numeric_cols = df.select_dtypes(include='number').columns
-
-if len(numeric_cols) > 0:
-    selected_column = st.selectbox("Select column for analysis", numeric_cols)
-
-    col1, col2, col3 = st.columns(3)
-
-    col1.metric("Total Rows", df.shape[0])
-    col2.metric("Columns", df.shape[1])
-    col3.metric("Average", round(df[selected_column].mean(), 2))
-
-    col4, col5 = st.columns(2)
-
-    col4.metric("Max", df[selected_column].max())
-    col5.metric("Min", df[selected_column].min())
 
         # Enforce plan limits
         if df.shape[0] > PLAN.max_rows:
-            st.error(f"Your dataset has {df.shape[0]:,} rows. Your plan allows up to {PLAN.max_rows:,}.")
+            st.error(
+                f"Your dataset has {df.shape[0]:,} rows. Your plan allows up to {PLAN.max_rows:,}."
+            )
             st.stop()
+
         if df.shape[1] > PLAN.max_cols:
-            st.error(f"Your dataset has {df.shape[1]:,} columns. Your plan allows up to {PLAN.max_cols:,}.")
+            st.error(
+                f"Your dataset has {df.shape[1]:,} columns. Your plan allows up to {PLAN.max_cols:,}."
+            )
             st.stop()
-        # Data Cleaning
-st.subheader("🧹 Data Cleaning")
 
-missing_total = int(df.isna().sum().sum())
-st.write(f"Missing values in dataset: {missing_total}")
-
-if missing_total > 0:
-    cleaning_option = st.selectbox(
-        "Choose how to handle missing values",
-        ["Do nothing", "Drop rows with missing values", "Fill numeric missing values with column mean"]
-    )
-
-    if cleaning_option == "Drop rows with missing values":
-        df = df.dropna()
-        st.success("Rows with missing values removed.")
-
-    elif cleaning_option == "Fill numeric missing values with column mean":
+        # KPI Section
+        st.subheader("📊 Key Metrics")
         numeric_cols = df.select_dtypes(include="number").columns
-        df[numeric_cols] = df[numeric_cols].fillna(df[numeric_cols].mean())
-        st.success("Numeric missing values filled with column mean.")
 
+        if len(numeric_cols) > 0:
+            selected_column = st.selectbox("Select column for analysis", numeric_cols)
+
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Total Rows", df.shape[0])
+            col2.metric("Columns", df.shape[1])
+            col3.metric("Average", round(df[selected_column].mean(), 2))
+
+            col4, col5 = st.columns(2)
+            col4.metric("Max", df[selected_column].max())
+            col5.metric("Min", df[selected_column].min())
+        else:
+            st.info("No numeric columns found for KPI analysis.")
+
+        # Data Cleaning
+        st.subheader("🧹 Data Cleaning")
+        missing_total = int(df.isna().sum().sum())
+        st.write(f"Missing values in dataset: {missing_total}")
+
+        if missing_total > 0:
+            cleaning_option = st.selectbox(
+                "Choose how to handle missing values",
+                [
+                    "Do nothing",
+                    "Drop rows with missing values",
+                    "Fill numeric missing values with column mean",
+                ],
+            )
+
+            if cleaning_option == "Drop rows with missing values":
+                df = df.dropna()
+                st.success("Rows with missing values removed.")
+
+            elif cleaning_option == "Fill numeric missing values with column mean":
+                fill_cols = df.select_dtypes(include="number").columns
+                df[fill_cols] = df[fill_cols].fillna(df[fill_cols].mean())
+                st.success("Numeric missing values filled with column mean.")
+
+        # Preview
         st.subheader("Preview")
         st.dataframe(df.head(50), use_container_width=True)
 
         with st.expander("Summary statistics"):
             st.write(df.describe(include="all"))
 
+        # Visualisation
         st.subheader("Visualisation")
-
         all_cols = df.columns.tolist()
         numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
 
@@ -246,6 +289,7 @@ if missing_total > 0:
 
         st.plotly_chart(apply_plot_theme(fig), use_container_width=True)
 
+        # Export
         st.divider()
         st.subheader("Export")
 
@@ -264,7 +308,7 @@ if missing_total > 0:
         st.error(f"Error: {e}")
 
 # -----------------------------
-# Footer (branding lock)
+# Footer
 # -----------------------------
 st.divider()
 
