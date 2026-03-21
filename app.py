@@ -1,6 +1,6 @@
 # ------------------------------------------------------------
 # Dashlio — Data Dashboard Builder
-# Production build (no legacy SmartDash references)
+# Production build
 # ------------------------------------------------------------
 
 from __future__ import annotations
@@ -97,17 +97,24 @@ st.markdown(
           padding-right: 1rem;
           max-width: 1100px;
       }
-      h1,h2,h3 { margin: 0.25rem 0 0.5rem 0; }
+      h1, h2, h3 {
+          margin: 0.25rem 0 0.5rem 0;
+      }
       .dashlio-pill {
-          display:inline-block;
-          padding:0.2rem 0.55rem;
-          border:1px solid #e5e7eb;
-          border-radius:999px;
-          font-size:0.85rem;
+          display: inline-block;
+          padding: 0.2rem 0.55rem;
+          border: 1px solid #e5e7eb;
+          border-radius: 999px;
+          font-size: 0.85rem;
       }
       @media (prefers-color-scheme: dark) {
-        body, .main { background: #0e1117 !important; color: #e6e6e6 !important; }
-        .dashlio-pill { border-color:#334155; }
+        body, .main {
+            background: #0e1117 !important;
+            color: #e6e6e6 !important;
+        }
+        .dashlio-pill {
+            border-color: #334155;
+        }
       }
     </style>
     """,
@@ -121,14 +128,15 @@ col1, col2 = st.columns([1, 3], vertical_alignment="center")
 
 with col1:
     if os.path.exists(LOGO_FILE):
-        st.image(LOGO_FILE, width=160)
+        st.image(LOGO_FILE, width=140)
 
 with col2:
     st.title(APP_NAME)
 
 st.markdown(
     """
-Upload your dataset and instantly generate charts and visual insights.
+Turn your data into insights in seconds.  
+Upload a CSV or Excel file to explore, clean, and visualise your data instantly.
 
 • Upload CSV or Excel files  
 • Preview and explore your data  
@@ -157,9 +165,6 @@ with st.sidebar:
     st.write("**Pro** — exports + higher limits")
     st.write("**Business** — highest limits + team use")
 
-    st.divider()
-    
-
 
 # -----------------------------
 # Helpers
@@ -168,7 +173,7 @@ def apply_plot_theme(fig):
     fig.update_layout(
         paper_bgcolor="rgba(0,0,0,0)",
         plot_bgcolor="rgba(0,0,0,0)",
-        margin=dict(l=10, r=10, t=30, b=10),
+        margin=dict(l=10, r=10, t=50, b=20),
     )
     return fig
 
@@ -185,6 +190,7 @@ def read_uploaded_file(uploaded_file) -> pd.DataFrame:
 # -----------------------------
 # Upload
 # -----------------------------
+st.markdown("### 📂 Upload your dataset")
 uploaded_file = st.file_uploader("Upload a CSV or Excel file", type=["csv", "xlsx", "xls"])
 
 if not uploaded_file:
@@ -202,6 +208,7 @@ else:
 
     try:
         df = read_uploaded_file(uploaded_file)
+        st.success(f"File loaded: {uploaded_file.name}")
 
         # Enforce plan limits
         if df.shape[0] > PLAN.max_rows:
@@ -215,27 +222,28 @@ else:
                 f"Your dataset has {df.shape[1]:,} columns. Your plan allows up to {PLAN.max_cols:,}."
             )
             st.stop()
-         
 
         # KPI Section
         st.markdown("## 📊 Dashboard Overview")
-st.subheader("📊 Key Metrics")
+        st.subheader("📊 Key Metrics")
 
-numeric_cols = df.select_dtypes(include="number").columns
+        numeric_cols = df.select_dtypes(include="number").columns
 
-if len(numeric_cols) > 0:
-    selected_column = st.selectbox("Select column for analysis", numeric_cols)
+        if len(numeric_cols) > 0:
+            selected_column = st.selectbox("Select column for analysis", numeric_cols)
 
-    col1, col2, col3 = st.columns(3)
-    col1.metric("📄 Rows", f"{df.shape[0]:,}")
-    col2.metric("📊 Columns", df.shape[1])
-    col3.metric("Average", round(df[selected_column].mean(), 2))
+            kpi1, kpi2, kpi3 = st.columns(3)
+            kpi1.metric("📄 Rows", f"{df.shape[0]:,}")
+            kpi2.metric("📊 Columns", df.shape[1])
+            kpi3.metric("Average", round(df[selected_column].mean(), 2))
 
-    col4, col5 = st.columns(2)
-    col4.metric("Max", df[selected_column].max())
-    col5.metric("Min", df[selected_column].min())
-else:
-    st.info("No numeric columns found for KPI analysis.")
+            kpi4, kpi5 = st.columns(2)
+            kpi4.metric("Max", df[selected_column].max())
+            kpi5.metric("Min", df[selected_column].min())
+        else:
+            st.info("No numeric columns found for KPI analysis.")
+
+        st.divider()
 
         # Data Cleaning
         st.subheader("🧹 Data Cleaning")
@@ -261,6 +269,8 @@ else:
                 df[fill_cols] = df[fill_cols].fillna(df[fill_cols].mean())
                 st.success("Numeric missing values filled with column mean.")
 
+        st.divider()
+
         # Preview
         st.subheader("Preview")
         st.dataframe(df.head(50), use_container_width=True)
@@ -268,15 +278,17 @@ else:
         with st.expander("Summary statistics"):
             st.write(df.describe(include="all"))
 
-        # Visualisation
-        st.subheader("Chart Settings")
+        st.divider()
+
+        # Chart Settings
+        st.subheader("📈 Chart Settings")
         chart_type = st.selectbox(
-            "Chart type", 
+            "Choose chart type",
             ["Bar", "Line", "Scatter", "Pie"]
         )
-        
+
         # Visualisation
-        st.subheader("Visualisation")
+        st.subheader("📈 Visualisation")
         all_cols = df.columns.tolist()
         numeric_cols = df.select_dtypes(include=["number"]).columns.tolist()
 
@@ -288,20 +300,20 @@ else:
         y_axis = st.selectbox("Y-axis", numeric_cols, index=0)
 
         if chart_type == "Bar":
-            fig = px.bar(df, x=x_axis, y=y_axis)
+            fig = px.bar(df, x=x_axis, y=y_axis, title=f"{y_axis} by {x_axis}")
         elif chart_type == "Line":
-            fig = px.line(df, x=x_axis, y=y_axis)
+            fig = px.line(df, x=x_axis, y=y_axis, title=f"{y_axis} by {x_axis}")
         elif chart_type == "Scatter":
-            fig = px.scatter(df, x=x_axis, y=y_axis)
+            fig = px.scatter(df, x=x_axis, y=y_axis, title=f"{y_axis} vs {x_axis}")
         else:
-            fig = px.pie(df, names=x_axis, values=y_axis)
+            fig = px.pie(df, names=x_axis, values=y_axis, title=f"{y_axis} by {x_axis}")
 
         st.plotly_chart(apply_plot_theme(fig), use_container_width=True)
 
-        # Export
         st.divider()
-        st.subheader("Export")
 
+        # Export
+        st.subheader("Export")
         if not PLAN.export_enabled:
             st.warning("Export is locked on the Free plan. Upgrade to Pro to download cleaned data.")
         else:
@@ -327,5 +339,3 @@ else:
     st.caption("Dashlio")
 
 st.caption("© 2025 Dashlio. All rights reserved.")
-
-
