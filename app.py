@@ -216,8 +216,11 @@ else:
                 f"Your dataset has {df.shape[1]:,} columns. Your plan allows up to {PLAN.max_cols:,}."
             )
             st.stop()
+         
 
         # KPI Section
+        st.markdown("## 📊 Dashboard Overview")  
+        
         st.subheader("📊 Key Metrics")
         numeric_cols = df.select_dtypes(include="number").columns
 
