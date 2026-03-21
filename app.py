@@ -158,8 +158,7 @@ with st.sidebar:
     st.write("**Business** — highest limits + team use")
 
     st.divider()
-    st.subheader("Chart Settings")
-    chart_type = st.selectbox("Chart type", ["Bar", "Line", "Scatter", "Pie"], index=0)
+    
 
 
 # -----------------------------
@@ -269,6 +268,13 @@ else:
         with st.expander("Summary statistics"):
             st.write(df.describe(include="all"))
 
+        # Visualisation
+        st.subheader("Chart Settings")
+        chart_type = st.selectbox(
+            "Chart type", 
+            ["Bar", "Line", "Scatter", "Pie"]
+        )
+        
         # Visualisation
         st.subheader("Visualisation")
         all_cols = df.columns.tolist()
