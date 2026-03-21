@@ -218,24 +218,24 @@ else:
          
 
         # KPI Section
-        st.markdown("## 📊 Dashboard Overview")  
-        
-        st.subheader("📊 Key Metrics")
-        numeric_cols = df.select_dtypes(include="number").columns
+        st.markdown("## 📊 Dashboard Overview")
+st.subheader("📊 Key Metrics")
 
-        if len(numeric_cols) > 0:
-            selected_column = st.selectbox("Select column for analysis", numeric_cols)
+numeric_cols = df.select_dtypes(include="number").columns
 
-            col1, col2, col3 = st.columns(3)
-            col1.metric("Total Rows", df.shape[0])
-            col2.metric("Columns", df.shape[1])
-            col3.metric("Average", round(df[selected_column].mean(), 2))
+if len(numeric_cols) > 0:
+    selected_column = st.selectbox("Select column for analysis", numeric_cols)
 
-            col4, col5 = st.columns(2)
-            col4.metric("Max", df[selected_column].max())
-            col5.metric("Min", df[selected_column].min())
-        else:
-            st.info("No numeric columns found for KPI analysis.")
+    col1, col2, col3 = st.columns(3)
+    col1.metric("📄 Rows", f"{df.shape[0]:,}")
+    col2.metric("📊 Columns", df.shape[1])
+    col3.metric("Average", round(df[selected_column].mean(), 2))
+
+    col4, col5 = st.columns(2)
+    col4.metric("Max", df[selected_column].max())
+    col5.metric("Min", df[selected_column].min())
+else:
+    st.info("No numeric columns found for KPI analysis.")
 
         # Data Cleaning
         st.subheader("🧹 Data Cleaning")
@@ -327,4 +327,5 @@ else:
     st.caption("Dashlio")
 
 st.caption("© 2025 Dashlio. All rights reserved.")
+
 
