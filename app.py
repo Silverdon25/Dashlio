@@ -313,24 +313,24 @@ else:
         st.divider()
       
         # Export
-st.divider()
-st.subheader("Export")
+        st.divider()
+        st.subheader("Export")
 
-if not PLAN.export_enabled:
-    st.warning("Export is locked on the Free plan. Upgrade to Pro (£19/month) to unlock downloads.")
+        if not PLAN.export_enabled:
+             st.warning("Export is locked on the Free plan. Upgrade to Pro (£19/month) to unlock downloads.")
 
-    if st.button("Upgrade to Pro (£19/month)"):
+        if st.button("Upgrade to Pro (£19/month)"):
         st.info("Payments and upgrades will be available soon.")
 
-else:
-    csv_bytes = df.to_csv(index=False).encode("utf-8")
+        else:
+             csv_bytes = df.to_csv(index=False).encode("utf-8")
 
-    st.download_button(
-        "Download CSV",
-        data=csv_bytes,
-        file_name="dashlio_export.csv",
-        mime="text/csv",
-    )
+             st.download_button(
+                 "Download CSV",
+                 data=csv_bytes,
+                 file_name="dashlio_export.csv",
+                 mime="text/csv",
+             )
     except Exception as e:
         st.error(f"Error: {e}")
 
