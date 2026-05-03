@@ -53,7 +53,7 @@ PLANS = {
     ),
 }
 
-TIER = (st.secrets.get("TIER", "free") if hasattr(st, "secrets") else "free").lower().strip()
+TIER = "free"
 PLAN = PLANS.get(TIER, PLANS["free"])
 
 APP_NAME = "Dashlio"
