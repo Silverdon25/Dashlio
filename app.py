@@ -308,12 +308,16 @@ else:
         st.subheader("Export")
 
         if not PLAN.export_enabled:
-            st.warning("Export is locked on the Free plan. Upgrade to Pro (£19/month) to unlock downloads.")
+            st.warning("Export is locked on the 
+        Free plan. Upgrade to Pro (£19/month) to 
+        unlock downloads.")
 
-             if st.button("Upgrade to Pro (£19/month)"):
-                 st.info("Payments and upgrades will be available soon.")
+             
+                 
         else:
-            csv_bytes = df.to_csv(index=False).encode("utf-8")
+            csv_bytes = 
+        df.to_csv(index=False).encode("utf-8")
+    
             st.download_button(
                 "Download CSV",
                 data=csv_bytes,
