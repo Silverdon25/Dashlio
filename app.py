@@ -308,9 +308,11 @@ else:
         st.subheader("Export")
 
         if not PLAN.export_enabled:
-            st.warning("Export is locked on the 
-        Free plan. Upgrade to Pro (£19/month) to 
-        unlock downloads.")
+            st.warning(
+                "Export is locked on the Free plan. " 
+                "Upgrade to Pro (£19/month) to unlock 
+            downloads."
+            )
 
              
                  
