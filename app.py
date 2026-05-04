@@ -1,6 +1,6 @@
 # ------------------------------------------------------------
 # Dashlio — Data Dashboard Builder
-# Production build
+# Production build (no legacy SmartDash references)
 # ------------------------------------------------------------
 
 from __future__ import annotations
@@ -53,7 +53,7 @@ PLANS = {
     ),
 }
 
-TIER = "free"
+TIER = (st.secrets.get("TIER", "free") if hasattr(st, "secrets") else "free").lower().strip()
 PLAN = PLANS.get(TIER, PLANS["free"])
 
 APP_NAME = "Dashlio"
@@ -97,24 +97,17 @@ st.markdown(
           padding-right: 1rem;
           max-width: 1100px;
       }
-      h1, h2, h3 {
-          margin: 0.25rem 0 0.5rem 0;
-      }
+      h1,h2,h3 { margin: 0.25rem 0 0.5rem 0; }
       .dashlio-pill {
-          display: inline-block;
-          padding: 0.2rem 0.55rem;
-          border: 1px solid #e5e7eb;
-          border-radius: 999px;
-          font-size: 0.85rem;
+          display:inline-block;
+          padding:0.2rem 0.55rem;
+          border:1px solid #e5e7eb;
+          border-radius:999px;
+          font-size:0.85rem;
       }
       @media (prefers-color-scheme: dark) {
-        body, .main {
-            background: #0e1117 !important;
-            color: #e6e6e6 !important;
-        }
-        .dashlio-pill {
-            border-color: #334155;
-        }
+        body, .main { background: #0e1117 !important; color: #e6e6e6 !important; }
+        .dashlio-pill { border-color:#334155; }
       }
     </style>
     """,
@@ -128,7 +121,7 @@ col1, col2 = st.columns([1, 3], vertical_alignment="center")
 
 with col1:
     if os.path.exists(LOGO_FILE):
-        st.image(LOGO_FILE, width=140)
+        st.image(LOGO_FILE, width=160)
 
 with col2:
     st.title(APP_NAME)
@@ -232,14 +225,14 @@ else:
         if len(numeric_cols) > 0:
             selected_column = st.selectbox("Select column for analysis", numeric_cols)
 
-            kpi1, kpi2, kpi3 = st.columns(3)
-            kpi1.metric("📄 Rows", f"{df.shape[0]:,}")
-            kpi2.metric("📊 Columns", df.shape[1])
-            kpi3.metric("Average", round(df[selected_column].mean(), 2))
+            col1, col2, col3 = st.columns(3)
+            col1.metric("📄 Rows", f"{df.shape[0]:,}")
+            col2.metric("📊 Columns", df.shape[1])
+            col3.metric("Average", round(df[selected_column].mean(), 2))
 
-            kpi4, kpi5 = st.columns(2)
-            kpi4.metric("Max", df[selected_column].max())
-            kpi5.metric("Min", df[selected_column].min())
+            col4, col5 = st.columns(2)
+            col4.metric("Max", df[selected_column].max())
+            col5.metric("Min", df[selected_column].min())
         else:
             st.info("No numeric columns found for KPI analysis.")
 
@@ -310,27 +303,21 @@ else:
 
         st.plotly_chart(apply_plot_theme(fig), use_container_width=True)
 
-        st.divider()
-      
         # Export
         st.divider()
         st.subheader("Export")
 
         if not PLAN.export_enabled:
-             st.warning("Export is locked on the Free plan. Upgrade to Pro (£19/month) to unlock downloads.")
-
-        if st.button("Upgrade to Pro (£19/month)"):
-            st.info("Payments and upgrades will be available soon.")
-
+            st.warning("Export is locked on the Free plan. Upgrade to Pro to download cleaned data.")
         else:
-             csv_bytes = df.to_csv(index=False).encode("utf-8")
+            csv_bytes = df.to_csv(index=False).encode("utf-8")
+            st.download_button(
+                "Download CSV",
+                data=csv_bytes,
+                file_name="dashlio_export.csv",
+                mime="text/csv",
+            )
 
-             st.download_button(
-                 "Download CSV",
-                 data=csv_bytes,
-                 file_name="dashlio_export.csv",
-                 mime="text/csv",
-             )
     except Exception as e:
         st.error(f"Error: {e}")
 
